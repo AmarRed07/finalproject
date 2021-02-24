@@ -1,0 +1,42 @@
+/* ADD CARD DIV SHADOW TEXT lines 60-61 */
+.card-shadow {
+    text-shadow: 3px 3px lightblue;
+}
+/* TABLE SHADOW TEXT lines 47-49  --- also used for some Headers!! */
+.table-shadow {
+    text-shadow: 1px 1px gray;
+}
+
+
+tr :hover {
+    background-color:lightblue;
+}
+
+tr :hover {
+    background-color:rgb(139, 170, 180);
+}
+
+.background {
+    background-color: bisque;
+    /* color: bisque; */
+}
+
+
+.form-control {
+  background-color: #96d3ec;
+}
+#warningColor {
+    color:red;
+}
+
+
+
+
+
+.fontcolor {
+    color: rgb(139, 106, 148)
+}
+
+#font-size {
+    font-size: large;
+}
