@@ -21,7 +21,7 @@ class reservations {
 
 
 class APIcalls {
-    static url = "" //API url when we get one lol
+    static url = "https://crudcrud.com/api/36539e4d35dd4b93b7729109aa6b5310/unicorns" //API url when we get one lol
 
     //geting all the date
     static allDates() {
@@ -35,7 +35,15 @@ class APIcalls {
 
     //create date
     static createDate(date) {
-        return $.post(this.url, date);
+       // return $.post(this.url, date);
+        $.ajax({
+            url: this.url,
+            dataType: 'json',
+            data: JSON.stringify(date),
+            contentType: 'application/json',
+            type: 'POST'
+        });
+
     }
 
     //delete date
@@ -58,5 +66,72 @@ class APIcalls {
     }
 }
 
+class DOMManager {
+    static dates; 
+
+    static getDatesAndRender () {
+       return APIcalls.allDates().then((dates)=>this.render(dates)); 
+    }
+
+//gets all dates then rendes the dom
+    static allDate(){
+        APIcalls.allDates().then(dates =>this.render(dates)); 
+    }
+
+    //makes the date then renders the DOM, getting on error where it dosent render the dom. 
+
+    static createDate (newDate) {
+        APIcalls.createDate(new date(newDate))
+        .then(()=> {
+            return APIcalls.allDates();
+        })
+        .then(dates => this.render(dates))
+    }
+
+    //delete the date
+    static deleteDate(id) {
+        APIcalls.deleteDate(id).then(this.getDatesAndRender())
+    }
+
+    //still need the add the res add and delete.
+    //renders the dome.
+    static render(dates) {
+        this.dates = dates
+
+        $('#date-table').empty(); 
+        for(let date of dates){
+            $('#date-table').prepend(
+                `<div id="${date._id}" class="card">
+                <div class="card-header">
+                    <h2>${date.date}</h2>
+                    <button class="btn btn-danger" onclick="DOMManager.deleteDate('${date._id}')"> Delete </button>
+                </div>
+                    <div class="card-body">
+                        <div class="card">
+                            <div class="row"> 
+                                <div class="col-sm"> 
+                                    <input type="text" id="${date._id}-room-name" class="form-control" placeholder="room name">
+                                </div>
+                                <div class="col-sm">
+                                <input type="text" id="${date._id}-room-area" class="form-control" placeholder="room area">
+                                </div>
+                            </div>
+                            <bitton id="${date._id}-new-room" onclick="DOMManager.addRoom('${date._id}')" class="btn btn-primary form-control">Add</button>
+                         </div>
+                    </div>
+            </div>  <br>`
+            ); 
+        }
+
+    }
 
 
+}
+
+//event lister on the create.
+$('#create-new-house').click(()=> {
+    DOMManager.createDate($('#date').val())
+})
+
+//calling the create function 
+DOMManager.makeDate(); 
