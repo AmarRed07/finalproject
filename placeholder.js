@@ -36,7 +36,7 @@ class APIcalls {
     //create date
     static createDate(date) {
        // return $.post(this.url, date);
-        $.ajax({
+       return $.ajax({
             url: this.url,
             dataType: 'json',
             data: JSON.stringify(date),
@@ -91,6 +91,10 @@ class DOMManager {
     //delete the date
     static deleteDate(id) {
         APIcalls.deleteDate(id).then(this.getDatesAndRender())
+        .then(()=> {
+            return APIcalls.allDates();
+        })
+        .then(dates => this.render(dates))
     }
 
     //still need the add the res add and delete.
@@ -134,4 +138,4 @@ $('#create-new-house').click(()=> {
 })
 
 //calling the create function 
-DOMManager.makeDate(); 
+DOMManager.allDate(); 
