@@ -46,17 +46,6 @@ class APIcalls {
 
     }
 
-<<<<<<< HEAD
-    //delete date
-     static deleteDate(id) {
-         return $.ajax({
-             url: this.url + `/${id}`,
-             type: 'DELETE'
-         })
-     }
-
-=======
->>>>>>> fd36115cc41e5507e46553a34992a33642b94877
     //find date
     static updateHouse(date) {
         return $.ajax({
@@ -93,7 +82,7 @@ class DOMManager {
 
     //delete the date
     static deleteDate(id) {
-        APIcalls.deleteDate(id)
+        APIcalls.deleteDate(id).then(this.getDatesAndRender())
         .then(()=> {
             return APIcalls.allDates();
         })
@@ -108,19 +97,14 @@ class DOMManager {
         })
     }
 // delete the date button -working.
-    static deleteDate(id) {
-        APIcalls.deleteDate(id)
-        .then(() => {
-            return APIcalls.getDatesAndRender();
-        })
-        .then((dates) => this.render(dates));
-    }
+    // static deleteDate(id) {
+    //     APIcalls.deleteDate(id)
+    //     .then(() => {
+    //         return APIcalls.getDatesAndRender();
+    //     })
+    //     .then((dates) => this.render(dates));
+    // }
 
-
-<<<<<<< HEAD
-
-=======
->>>>>>> fd36115cc41e5507e46553a34992a33642b94877
     //still need the add the res add and delete.
     //renders the dome.
     static render(dates) {
@@ -142,7 +126,7 @@ class DOMManager {
                                 <div class="col-sm">
                                 <input type="text" id="${date._id}-Number of Party" class="form-control" placeholder="Number in a party">
                                 </div>
-                            </div> <br>
+                            </div>
                             <bitton id="${date._id}-new-room" onclick="DOMManager.addRoom('${date._id}')" class="btn btn-primary form-control">Add</button>
                          </div>
                     </div>
@@ -156,9 +140,9 @@ class DOMManager {
 }
 
 //event lister on the create.
- $('#create-new-house').click(()=> {
-     DOMManager.createDate($('#date').val())
- })
+$('#create-new-house').click(()=> {
+    DOMManager.createDate($('#date').val())
+})
 
 //calling the create function 
 DOMManager.allDates(); 
