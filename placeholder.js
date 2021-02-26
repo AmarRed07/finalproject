@@ -97,23 +97,6 @@ class DOMManager {
         .then(dates => this.render(dates))
     }
 
-    //delete date
-    static deleteDate(id) {
-        return $.ajax({
-            url: this.url + `/${id}`,
-            type: 'DELETE'
-        })
-    }
-// delete the date button -working.
-    static deleteDate(id) {
-        APIcalls.deleteDate(id)
-        .then(() => {
-            return APIcalls.getDatesAndRender();
-        })
-        .then((dates) => this.render(dates));
-    }
-
-
     //still need the add the res add and delete.
     //renders the dome.
     static render(dates) {
