@@ -11,10 +11,9 @@ class date {
 }
 
 //class for the res info.
-class reservations {
-    constructor(name, time, partySize) {
+class Reservations {
+    constructor(name, partySize) {
         this.name = name;
-        this.time = time;
         this.partySize = partySize;
     }
 }
@@ -46,8 +45,6 @@ class APIcalls {
 
     }
 
-<<<<<<< HEAD
-=======
     //delete date
      static deleteDate(id) {
          return $.ajax({
@@ -56,17 +53,17 @@ class APIcalls {
          })
      }
 
->>>>>>> fe7e934ea10673cb803741459227b62684cfba52
     //find date
-    static updateHouse(date) {
+    static updateDate(date) {
         return $.ajax({
-            url: this.url + `/${date.id}`, //the ID is a guess for the API or array.
+            type: 'PUT',
+            url: this.url + `/${date._id}`,
             datatype: 'json',
             data: JSON.stringify(date),
-            contentType: 'application/json',
-            type: 'PUT'
+            contentType: 'application/json'
         });
     }
+
 }
 
 class DOMManager {
@@ -93,32 +90,28 @@ class DOMManager {
 
     //delete the date
     static deleteDate(id) {
-        APIcalls.deleteDate(id).then(this.getDatesAndRender())
+        APIcalls.deleteDate(id)
         .then(()=> {
             return APIcalls.allDates();
         })
         .then(dates => this.render(dates))
     }
 
-<<<<<<< HEAD
-    //delete date
-    static deleteDate(id) {
-        return $.ajax({
-            url: this.url + `/${id}`,
-            type: 'DELETE'
-        })
+    static addRoom(id) {
+        for (let date of this.dates) {
+            //finds making house ID.
+            if (date._id == id) {
+                //finds matching room id then call to the room class
+                date.reservations.push(new Reservations($(`#${date._id}-room-name`).val(), $(`#${date._id}-room-area`).val()));
+                APIcalls.updateDate(date)
+                .then(()=> {
+                    return APIcalls.allDates();
+                })
+                .then(dates => this.render(dates))
+            }
+        }
     }
-// delete the date button -working.
-    // static deleteDate(id) {
-    //     APIcalls.deleteDate(id)
-    //     .then(() => {
-    //         return APIcalls.getDatesAndRender();
-    //     })
-    //     .then((dates) => this.render(dates));
-    // }
 
-=======
->>>>>>> fe7e934ea10673cb803741459227b62684cfba52
     //still need the add the res add and delete.
     //renders the dome.
     static render(dates) {
@@ -126,6 +119,7 @@ class DOMManager {
         $('#date-table').empty(); 
         for(let date of dates){
             $('#date-table').prepend(
+              
                 `<div id="${date._id}" class="card">
                 <div class="card-header">
                     <h2>${date.date}</h2>
@@ -140,17 +134,14 @@ class DOMManager {
                                 <div class="col-sm">
                                 <input type="text" id="${date._id}-Number of Party" class="form-control" placeholder="Number in a party">
                                 </div>
-                            </div>
+                            </div> <br>
                             <bitton id="${date._id}-new-room" onclick="DOMManager.addRoom('${date._id}')" class="btn btn-primary form-control">Add</button>
                          </div>
                     </div>
             </div>  <br>`
             ); 
         }
-
     }
-
-
 }
 
 //event lister on the create.
