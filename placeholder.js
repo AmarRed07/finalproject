@@ -47,12 +47,12 @@ class APIcalls {
     }
 
     //delete date
-    static deleteDate(id) {
-        return $.ajax({
-            url: this.url + `/${id}`,
-            type: 'DELETE'
-        })
-    }
+    // static deleteDate(id) {
+    //     return $.ajax({
+    //         url: this.url + `/${id}`,
+    //         type: 'DELETE'
+    //     })
+    // }
 
     //find date
     static updateHouse(date) {
@@ -70,11 +70,11 @@ class DOMManager {
     static dates; 
 
     static getDatesAndRender () {
-       return APIcalls.allDates().then((dates)=>this.render(dates)); 
+       APIcalls.allDates().then((dates)=>this.render(dates)); 
     }
 
 //gets all dates then rendes the dom
-    static allDate(){
+    static allDates(){
         APIcalls.allDates().then(dates =>this.render(dates)); 
     }
 
@@ -88,6 +88,18 @@ class DOMManager {
         .then(dates => this.render(dates))
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
     //delete the date
     static deleteDate(id) {
         APIcalls.deleteDate(id).then(this.getDatesAndRender())
@@ -97,11 +109,31 @@ class DOMManager {
         .then(dates => this.render(dates))
     }
 
+    //delete date
+    static deleteDate(id) {
+        return $.ajax({
+            url: this.url + `/${id}`,
+            type: 'DELETE'
+        })
+    }
+// delete the date button -working.
+    static deleteDate(id) {
+        APIcalls.deleteDate(id)
+        .then(() => {
+            return APIcalls.getDatesAndRender();
+        })
+        .then((dates) => this.render(dates));
+    }
+
+
+
+
+
+
     //still need the add the res add and delete.
     //renders the dome.
     static render(dates) {
-        this.dates = dates
-
+        this.dates = dates;
         $('#date-table').empty(); 
         for(let date of dates){
             $('#date-table').prepend(
@@ -114,10 +146,10 @@ class DOMManager {
                         <div class="card">
                             <div class="row"> 
                                 <div class="col-sm"> 
-                                    <input type="text" id="${date._id}-room-name" class="form-control" placeholder="room name">
+                                    <input type="text" id="${date._id}-Reservation Name" class="form-control" placeholder="Reservation Name">
                                 </div>
                                 <div class="col-sm">
-                                <input type="text" id="${date._id}-room-area" class="form-control" placeholder="room area">
+                                <input type="text" id="${date._id}-Number of Party" class="form-control" placeholder="Number in a party">
                                 </div>
                             </div>
                             <bitton id="${date._id}-new-room" onclick="DOMManager.addRoom('${date._id}')" class="btn btn-primary form-control">Add</button>
@@ -133,9 +165,9 @@ class DOMManager {
 }
 
 //event lister on the create.
-$('#create-new-house').click(()=> {
-    DOMManager.createDate($('#date').val())
-})
+// $('#create-new-house').click(()=> {
+//     DOMManager.createDate($('#date').val())
+// })
 
 //calling the create function 
-DOMManager.allDate(); 
+DOMManager.allDates(); 
