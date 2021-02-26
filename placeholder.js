@@ -42,39 +42,37 @@ class APIcalls {
             contentType: 'application/json',
             type: 'POST'
         });
-
     }
-
+        //find date
+        static updateDate(date) {
+            return $.ajax({
+                url: this.url+ `/${date._id}`,
+                dataType: 'json',
+                data: JSON.stringify({
+                    "date" : date.date,
+                    "reservations" : date.reservations}),
+                contentType: 'application/json', 
+                type: 'PUT'
+            });
+        }
     //delete date
-     static deleteDate(id) {
-         return $.ajax({
-             url: this.url + `/${id}`,
-             type: 'DELETE'
-         })
-     }
-
-    //find date
-    static updateDate(date) {
+    static deleteDate(id) {
         return $.ajax({
-            type: 'PUT',
-            url: this.url + `/${date._id}`,
-            datatype: 'json',
-            data: JSON.stringify(date),
-            contentType: 'application/json'
-        });
+            url: this.url + `/${id}`,
+            type: 'DELETE'
+        })
     }
-
 }
 
 class DOMManager {
     static dates; 
 
     static getDatesAndRender () {
-       APIcalls.allDates().then((dates)=>this.render(dates)); 
+       return APIcalls.allDates().then((dates)=>this.render(dates)); 
     }
 
 //gets all dates then rendes the dom
-    static allDates(){
+    static allDate(){
         APIcalls.allDates().then(dates =>this.render(dates)); 
     }
 
@@ -90,39 +88,35 @@ class DOMManager {
 
     //delete the date
     static deleteDate(id) {
-        APIcalls.deleteDate(id)
+        APIcalls.deleteDate(id).then(this.getDatesAndRender())
         .then(()=> {
             return APIcalls.allDates();
         })
         .then(dates => this.render(dates))
     }
 
-<<<<<<< HEAD
-    static addRoom(id) {
+    static addRes(id) {
         for (let date of this.dates) {
             //finds making house ID.
             if (date._id == id) {
                 //finds matching room id then call to the room class
                 date.reservations.push(new Reservations($(`#${date._id}-room-name`).val(), $(`#${date._id}-room-area`).val()));
                 APIcalls.updateDate(date)
-                .then(()=> {
-                    return APIcalls.allDates();
-                })
-                .then(dates => this.render(dates))
             }
+            this.getDatesAndRender();
+            this.getDatesAndRender();
         }
     }
 
-=======
->>>>>>> ceab859bbfe4c590aba4396196656e850b38fd46
+
     //still need the add the res add and delete.
     //renders the dome.
     static render(dates) {
-        this.dates = dates;
+        this.dates = dates
+
         $('#date-table').empty(); 
         for(let date of dates){
             $('#date-table').prepend(
-              
                 `<div id="${date._id}" class="card">
                 <div class="card-header">
                     <h2>${date.date}</h2>
@@ -132,19 +126,30 @@ class DOMManager {
                         <div class="card">
                             <div class="row"> 
                                 <div class="col-sm"> 
-                                    <input type="text" id="${date._id}-Reservation Name" class="form-control" placeholder="Reservation Name">
+                                    <input type="text" id="${date._id}-room-name" class="form-control" placeholder="Guest Name">
                                 </div>
                                 <div class="col-sm">
-                                <input type="text" id="${date._id}-Number of Party" class="form-control" placeholder="Number in a party">
+                                <input type="text" id="${date._id}-room-area" class="form-control" placeholder="Party Size">
                                 </div>
                             </div> <br>
-                            <bitton id="${date._id}-new-room" onclick="DOMManager.addRoom('${date._id}')" class="btn btn-primary form-control">Add</button>
+                            <bitton id="${date._id}-new-room" onclick="DOMManager.addRes('${date._id}')" class="btn btn-primary form-control">Add</button> <br>
                          </div>
                     </div>
             </div>  <br>`
             ); 
+            for (let res of date.reservations) {
+                $(`#${date._id}`).find('.card-body').append(
+                    `<p>
+                            <span id="name-${res._id}"><strong> Name : </strong> ${res.name} </span>
+                            <span id="name-${res._id}"><strong> Part Size : </strong> ${res.partySize} </span>
+                            <button class="btn btn-danger" onclick="DOMManager.deleteRoom('${date._id}','${res._id}')">Delete Room</button>`
+                )
+            }
         }
+
     }
+
+
 }
 
 //event lister on the create.
@@ -153,4 +158,4 @@ $('#create-new-house').click(()=> {
 })
 
 //calling the create function 
-DOMManager.allDates(); 
+DOMManager.allDate(); 
