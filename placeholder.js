@@ -47,12 +47,12 @@ class APIcalls {
     }
 
     //delete date
-    // static deleteDate(id) {
-    //     return $.ajax({
-    //         url: this.url + `/${id}`,
-    //         type: 'DELETE'
-    //     })
-    // }
+     static deleteDate(id) {
+         return $.ajax({
+             url: this.url + `/${id}`,
+             type: 'DELETE'
+         })
+     }
 
     //find date
     static updateHouse(date) {
@@ -88,21 +88,9 @@ class DOMManager {
         .then(dates => this.render(dates))
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
     //delete the date
     static deleteDate(id) {
-        APIcalls.deleteDate(id).then(this.getDatesAndRender())
+        APIcalls.deleteDate(id)
         .then(()=> {
             return APIcalls.allDates();
         })
@@ -127,9 +115,6 @@ class DOMManager {
 
 
 
-
-
-
     //still need the add the res add and delete.
     //renders the dome.
     static render(dates) {
@@ -151,7 +136,7 @@ class DOMManager {
                                 <div class="col-sm">
                                 <input type="text" id="${date._id}-Number of Party" class="form-control" placeholder="Number in a party">
                                 </div>
-                            </div>
+                            </div> <br>
                             <bitton id="${date._id}-new-room" onclick="DOMManager.addRoom('${date._id}')" class="btn btn-primary form-control">Add</button>
                          </div>
                     </div>
@@ -165,9 +150,9 @@ class DOMManager {
 }
 
 //event lister on the create.
-// $('#create-new-house').click(()=> {
-//     DOMManager.createDate($('#date').val())
-// })
+ $('#create-new-house').click(()=> {
+     DOMManager.createDate($('#date').val())
+ })
 
 //calling the create function 
 DOMManager.allDates(); 
