@@ -46,14 +46,6 @@ class APIcalls {
 
     }
 
-    //delete date
-    // static deleteDate(id) {
-    //     return $.ajax({
-    //         url: this.url + `/${id}`,
-    //         type: 'DELETE'
-    //     })
-    // }
-
     //find date
     static updateHouse(date) {
         return $.ajax({
@@ -88,18 +80,6 @@ class DOMManager {
         .then(dates => this.render(dates))
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
     //delete the date
     static deleteDate(id) {
         APIcalls.deleteDate(id).then(this.getDatesAndRender())
@@ -124,10 +104,6 @@ class DOMManager {
         })
         .then((dates) => this.render(dates));
     }
-
-
-
-
 
 
     //still need the add the res add and delete.
