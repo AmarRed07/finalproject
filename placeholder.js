@@ -97,6 +97,7 @@ class DOMManager {
         .then(dates => this.render(dates))
     }
 
+<<<<<<< HEAD
     static addRoom(id) {
         for (let date of this.dates) {
             //finds making house ID.
@@ -112,6 +113,8 @@ class DOMManager {
         }
     }
 
+=======
+>>>>>>> ceab859bbfe4c590aba4396196656e850b38fd46
     //still need the add the res add and delete.
     //renders the dome.
     static render(dates) {
