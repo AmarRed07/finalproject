@@ -162,7 +162,7 @@ class DOMManager {
                                 <input type="text" id="${date._id}-room-area" class="form-control" placeholder="Party Size">
                                 </div>
                             </div> <br>
-                            <bitton id="${date._id}-new-room" onclick="DOMManager.addRes('${date._id}')" class="btn btn-primary form-control">Add</button> <br>
+                            <button id="${date._id}-new-room" onclick="DOMManager.addRes('${date._id}')" class="btn btn-primary form-control">Add</button> <br>
                          </div>
                     </div>
             </div>  <br>`
