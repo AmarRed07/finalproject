@@ -10,11 +10,22 @@ class date {
     }
 }
 
+//made an ID for the res.
+let utils = (function() {
+    let ids = 0;
+    function getNewId() {
+        return ids++;
+    }
+
+    return { getNewId };
+})();
+
 //class for the res info.
 class Reservations {
-    constructor(name, partySize) {
+    constructor(name, partySize,id) {
         this.name = name;
         this.partySize = partySize;
+        this.id = id;
     }
 }
 
@@ -67,6 +78,7 @@ class APIcalls {
 class DOMManager {
     static dates; 
 
+    //renders the dom
     static getDatesAndRender () {
        return APIcalls.allDates().then((dates)=>this.render(dates)); 
     }
@@ -95,16 +107,34 @@ class DOMManager {
         .then(dates => this.render(dates))
     }
 
+    //add the res
     static addRes(id) {
         for (let date of this.dates) {
-            //finds making house ID.
+            //finds date ID
             if (date._id == id) {
-                //finds matching room id then call to the room class
-                date.reservations.push(new Reservations($(`#${date._id}-room-name`).val(), $(`#${date._id}-room-area`).val()));
+                //finds matching date and makes a new res 
+                date.reservations.push(new Reservations($(`#${date._id}-room-name`).val(), $(`#${date._id}-room-area`).val(),utils.getNewId()));
                 APIcalls.updateDate(date)
             }
             this.getDatesAndRender();
-            this.getDatesAndRender();
+        }
+    }
+
+    static deleteRes (dateId,resId) {
+        for(let date of this.dates) {
+            //finds matching date 
+            if(date._id == dateId){
+                for(let res of date.reservations){
+                    //finds matching res id
+                    if( res.id == resId){
+                        //removes res and updates object
+                        date.reservations.splice(date.reservations.indexOf(res),1);
+                        APIcalls.updateDate(date)
+                    }
+                    this.getDatesAndRender()
+                    this.getDatesAndRender()
+                }
+            }
         }
     }
 
@@ -140,9 +170,9 @@ class DOMManager {
             for (let res of date.reservations) {
                 $(`#${date._id}`).find('.card-body').append(
                     `<p>
-                            <span id="name-${res._id}"><strong> Name : </strong> ${res.name} </span>
-                            <span id="name-${res._id}"><strong> Part Size : </strong> ${res.partySize} </span>
-                            <button class="btn btn-danger" onclick="DOMManager.deleteRoom('${date._id}','${res._id}')">Delete Room</button>`
+                            <span id="name-${res.id}"><strong> Name : </strong> ${res.name} </span>
+                            <span id="name-${res.id}"><strong> Part Size : </strong> ${res.partySize} </span>
+                            <button class="btn btn-danger" onclick="DOMManager.deleteRes('${date._id}','${res.id}')">Delete Room</button>`
                 )
             }
         }
